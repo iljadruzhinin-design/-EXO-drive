@@ -1,1 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EXO Driver</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
 
+    .card {
+      width: 92%;
+      max-width: 420px;
+      background: #1c1c1c;
+      border-radius: 20px;
+      padding: 24px;
+      box-sizing: border-box;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0,0,0,.4);
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 28px;
+    }
+
+    .score {
+      font-size: 18px;
+      margin-bottom: 20px;
+      opacity: .8;
+    }
+
+    .question {
+      font-size: 22px;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button {
+      width: 46%;
+      padding: 16px;
+      margin: 6px;
+      border: 0;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .yes {
+      background: #39d353;
+      color: #111;
+    }
+
+    .no {
+      background: #ff4d4d;
+      color: white;
+    }
+
+    .restart {
+      width: 100%;
+      background: #fff;
+      color: #111;
+    }
+
+    .result {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>⚡ EXO Driver</h1>
+    <div class="score" id="score">Баллы: 0</div>
+
+    <div class="question" id="question"></div>
+
+    <div id="buttons">
+      <button class="yes" onclick="answer(true)">ДА</button>
+      <button class="no" onclick="answer(false)">НЕТ</button>
+    </div>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const questions = [
+      "Готов арендовать скутер минимум на 9 месяцев?",
+      "Есть стабильный доход?",
+      "Готов оплачивать аренду каждую неделю без задержек?",
+      "Готов самостоятельно следить за техническим состоянием скутера?",
+      "Есть постоянное место проживания?",
+      "Готов соблюдать правила EXO и бережно относиться к технике?"
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      document.getElementById("question").innerText = questions[current];
+      document.getElementById("score").innerText = "Баллы: " + score;
+    }
+
+    function answer(value) {
+      if (value) score++;
+
+      current++;
+
+      if (current < questions.length) {
+        showQuestion();
+      } else {
+        finish();
+      }
+    }
+
+    function finish() {
+      document.getElementById("question").innerText = "";
+      document.getElementById("buttons").style.display = "none";
+
+      let verdict;
+
+      if (score >= 5) {
+        verdict = "🟢 Сильный кандидат";
+      } else if (score >= 3) {
+        verdict = "🟡 Нужна дополнительная проверка";
+      } else {
+        verdict = "🔴 Высокий риск";
+      }
+
+      document.getElementById("result").innerHTML =
+        '<div class="result">' + verdict + '</div>' +
+        '<div>Результат: ' + score + ' из ' + questions.length + '</div>' +
+        '<br><button class="restart" onclick="restart()">Начать заново</button>';
+    }
+
+    function restart() {
+      current = 0;
+      score = 0;
+      document.getElementById("buttons").style.display = "block";
+      document.getElementById("result").innerHTML = "";
+      showQuestion();
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
